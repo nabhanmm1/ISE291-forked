@@ -54,7 +54,7 @@ if uploaded_file:
                 st.write("### Student's t-test")
                 variances_known = st.checkbox("Assume equal variances (default: unchecked)")
                 t_stat, t_p_value = ttest_ind(df[col1], df[col2], equal_var=variances_known)
-                t_conclusion = "Fail to Reject Null Hypothesis" if t_p_value > 0.05 else "Reject Null Hypothesis"
+                t_conclusion = "Fail to Reject Null Hypothesis => The two population means are not significantly different" if t_p_value > 0.05 else "Reject Null Hypothesis => The two population means are significantly different"
 
                 st.write(f"T-test Statistic: {t_stat:.4f}")
                 st.write(f"P-value: {t_p_value:.4f}")
@@ -63,7 +63,7 @@ if uploaded_file:
                 # Test 2: Mann-Whitney U Test
                 st.write("### Mann-Whitney U Test")
                 u_stat, u_p_value = mannwhitneyu(df[col1], df[col2])
-                u_conclusion = "Fail to Reject Null Hypothesis" if u_p_value > 0.05 else "Reject Null Hypothesis"
+                u_conclusion = "Fail to Reject Null Hypothesis => The two population means are not significantly different" if u_p_value > 0.05 else "Reject Null Hypothesis => The two population means are significantly different"
 
                 st.write(f"U-test Statistic: {u_stat:.4f}")
                 st.write(f"P-value: {u_p_value:.4f}")
