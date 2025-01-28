@@ -9,11 +9,11 @@ st.markdown("Welcome to the class's Streamlit Hub! Use the sidebar to navigate."
 st.sidebar.title("Navigation")
 
 # Dynamic Topics
-topics = [f for f in os.listdir("pages") if os.path.isdir(os.path.join("pages", f))]
+topics = [f for f in os.listdir("apps") if os.path.isdir(os.path.join("apps", f))]
 topic = st.sidebar.selectbox("Choose a Topic", topics)
 
 # Sub-Apps for Selected Topic
-sub_apps_path = os.path.join("pages", topic)
+sub_apps_path = os.path.join("apps", topic)
 sub_apps = [f for f in os.listdir(sub_apps_path) if f.endswith(".py")]
 
 sub_app = st.sidebar.selectbox("Choose a Sub-App", sub_apps)
