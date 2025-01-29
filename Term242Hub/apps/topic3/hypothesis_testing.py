@@ -36,7 +36,7 @@ if uploaded_file:
                     normality_results[col] = {
                         "Test Statistic": stat,
                         "P-value": p_value,
-                        "Conclusion": "Data is Normal" if p_value > 0.05 else "Data is Not Normal",
+                        "Conclusion": "Data is not Normal" if p_value > 0.05 else "Data is Normal",
                     }
 
                 st.write("### Normality Test Results")
