@@ -32,8 +32,16 @@ if uploaded_file:
     for i in range(num_filters):
         col = st.selectbox(f"Select column {i+1}:", df.columns, key=f"col_{i}")
         condition = st.selectbox(f"Select condition for {col}:", ["=", "!=", ">", "<", ">=", "<="], key=f"cond_{i}")
-        value = st.text_input(f"Enter value for {col}:", key=f"val_{i}")
-        filters.append((col, condition, value))
+        
+        if condition == "=":
+            unique_values = df[col].dropna().unique().tolist()
+            value = st.multiselect(f"Select value(s) for {col}:", unique_values, key=f"val_{i}")
+            value_str = " | ".join([f'`{col}` == "{v}"' for v in value]) if value else ""
+        else:
+            value = st.text_input(f"Enter value for {col}:", key=f"val_{i}")
+            value_str = f'`{col}` {condition} "{value}"' if value else ""
+        
+        filters.append(value_str)
 
         if i < num_filters - 1:
             logic_operators[i] = st.selectbox(f"Select logical operator after condition {i+1}:", ["AND", "OR"], key=f"logic_{i}")
@@ -41,19 +49,11 @@ if uploaded_file:
     filtered_df = df[selected_columns]  # Default is all selected columns
     
     if filters:
-        query_parts = []
-        for i, (col, cond, val) in enumerate(filters):
-            try:
-                val = float(val) if val.replace(".", "", 1).isdigit() else f'"{val}"'
-            except ValueError:
-                val = f'"{val}"'
-            query_parts.append(f"`{col}` {cond} {val}")
-            if i < len(logic_operators):
-                query_parts.append(logic_operators[i])
-        query_string = " ".join(query_parts)
+        query_string = f' {logic_operators[0]} '.join([f for f in filters if f])
         
         try:
-            filtered_df = df.query(query_string)[selected_columns]
+            if query_string:
+                filtered_df = df.query(query_string)[selected_columns]
         except Exception as e:
             st.error(f"Invalid condition: {e}")
 
