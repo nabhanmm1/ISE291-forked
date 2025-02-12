@@ -27,25 +27,30 @@ if uploaded_file:
     filters = []
     num_filters = st.number_input("Number of conditions:", min_value=0, max_value=5, value=0, step=1)
 
+    logic_operators = ["AND"] * (num_filters - 1)  # Default to AND between conditions
+
     for i in range(num_filters):
         col = st.selectbox(f"Select column {i+1}:", df.columns, key=f"col_{i}")
         condition = st.selectbox(f"Select condition for {col}:", ["=", "!=", ">", "<", ">=", "<="], key=f"cond_{i}")
         value = st.text_input(f"Enter value for {col}:", key=f"val_{i}")
         filters.append((col, condition, value))
-    
-    logic_operator = st.radio("Apply conditions with:", ["AND", "OR"], key="logic_operator")
+
+        if i < num_filters - 1:
+            logic_operators[i] = st.selectbox(f"Select logical operator after condition {i+1}:", ["AND", "OR"], key=f"logic_{i}")
     
     filtered_df = df[selected_columns]  # Default is all selected columns
     
     if filters:
         query_parts = []
-        for col, cond, val in filters:
+        for i, (col, cond, val) in enumerate(filters):
             try:
                 val = float(val) if val.replace(".", "", 1).isdigit() else f'"{val}"'
             except ValueError:
                 val = f'"{val}"'
             query_parts.append(f"`{col}` {cond} {val}")
-        query_string = f" {logic_operator} ".join(query_parts)
+            if i < len(logic_operators):
+                query_parts.append(logic_operators[i])
+        query_string = " ".join(query_parts)
         
         try:
             filtered_df = df.query(query_string)[selected_columns]
@@ -117,4 +122,4 @@ if uploaded_file:
 
     if st.button("Add another plot"):
         st.session_state["plot_count"] += 1
-        st.experimental_rerun()
+        st.rerun()
