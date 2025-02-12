@@ -49,7 +49,8 @@ if uploaded_file:
     filtered_df = df[selected_columns]  # Default is all selected columns
     
     if filters:
-        query_string = f' {logic_operators[0]} '.join([f for f in filters if f])
+        non_empty_filters = [f for f in filters if f]
+        query_string = f' {logic_operators[0]} '.join(non_empty_filters) if logic_operators and non_empty_filters else " ".join(non_empty_filters)
         
         try:
             if query_string:
