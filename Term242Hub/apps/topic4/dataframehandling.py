@@ -36,7 +36,7 @@ if uploaded_file:
         if condition == "=":
             unique_values = df[col].dropna().unique().tolist()
             value = st.multiselect(f"Select value(s) for {col}:", unique_values, key=f"val_{i}")
-            value_str = " | ".join([f'`{col}` == "{v}"' for v in value]) if value else ""
+            value_str = " | ".join([f'`{col}` == {v}' if isinstance(v, (int, float)) else f'`{col}` == "{v}"' for v in value]) if value else ""
         else:
             value = st.text_input(f"Enter value for {col}:", key=f"val_{i}")
             value_str = f'`{col}` {condition} "{value}"' if value else ""
