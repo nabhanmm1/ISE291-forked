@@ -73,6 +73,12 @@ st.write("- Lower values of PC1 correspond to individuals who watch more Comedy 
 st.write("- A PC1 value close to 0 corresponds to individuals who watch an equal number of Action and Comedy movies.")
 st.write("This suggests that PC1 can be interpreted as a 'Taste Preference Score,' where positive values indicate an inclination towards Action movies and negative values indicate an inclination towards Comedy movies.")
 
+st.subheader("Interpreting Principal Component 2")
+st.write("Examining PC2, we observe that it corresponds to the total number of movies watched by an individual, regardless of genre.")
+st.write("- Higher values of PC2 indicate individuals who have watched more movies overall (both Action and Comedy).")
+st.write("- Lower values of PC2 indicate individuals who have watched fewer movies overall.")
+st.write("Since most individuals in the dataset have watched a similar total number of movies, the variance in PC2 is relatively low compared to PC1. This explains why PC2 captures much less variance.")
+
 st.subheader("Why This Makes Sense")
 st.write("PCA identifies the direction of maximum variance in the data. Since action and comedy movie counts are the two defining features in this dataset, PCA naturally finds the dominant trend, which happens to be how much an individual leans towards one genre over the other.")
 st.write("The second principal component (PC2), which explains the remaining variance, would capture a different relationship, likely related to overall variability in watching behavior rather than preference.")
@@ -103,6 +109,23 @@ ax.grid(True)
 st.pyplot(fig)
 
 st.write("From the scatter plot, we can see that PC1 is highly correlated with the difference between Action and Comedy movies watched. This further supports our interpretation that PC1 represents the customer's taste preference.")
+
+st.subheader("Further Confirmation: PC2 and Total Movies Watched")
+st.write("To validate our interpretation of PC2, we can examine its correlation with the total number of movies watched (Action + Comedy). If PC2 represents overall movie-watching behavior, we should see a strong correlation.")
+
+# Compute the total number of movies watched
+total_movies = data[:, 0] + data[:, 1]
+
+# Scatter plot to visualize correlation
+fig, ax = plt.subplots()
+ax.scatter(total_movies, principal_components[:, 1], c=colors)
+ax.set_xlabel("Total Movies Watched")
+ax.set_ylabel("PC2 Value")
+ax.set_title("Correlation between Total Movies Watched and PC2")
+ax.grid(True)
+st.pyplot(fig)
+
+st.write("From the scatter plot, we can see that PC2 is highly correlated with the total number of movies watched. This confirms our interpretation that PC2 represents overall movie-watching behavior.")
 
 st.subheader("Variance Explained by Each Principal Component")
 st.write("The following bar chart represents the proportion of total variance explained by each principal component.")
