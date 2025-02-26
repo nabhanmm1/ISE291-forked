@@ -66,6 +66,17 @@ for length, vector in zip(pca.explained_variance_, pca.components_):
 st.pyplot(fig)
 
 # Display PCA results with explanations
+st.subheader("Interpreting Principal Component 1")
+st.write("Observing the PCA-transformed data, we notice that PC1 appears to represent a customer's inclination towards either Action or Comedy movies.")
+st.write("- Higher values of PC1 correspond to individuals who watch more Action movies than Comedy movies.")
+st.write("- Lower values of PC1 correspond to individuals who watch more Comedy movies than Action movies.")
+st.write("- A PC1 value close to 0 corresponds to individuals who watch an equal number of Action and Comedy movies.")
+st.write("This suggests that PC1 can be interpreted as a 'Taste Preference Score,' where positive values indicate an inclination towards Action movies and negative values indicate an inclination towards Comedy movies.")
+
+st.subheader("Why This Makes Sense")
+st.write("PCA identifies the direction of maximum variance in the data. Since action and comedy movie counts are the two defining features in this dataset, PCA naturally finds the dominant trend, which happens to be how much an individual leans towards one genre over the other.")
+st.write("The second principal component (PC2), which explains the remaining variance, would capture a different relationship, likely related to overall variability in watching behavior rather than preference.")
+
 st.subheader("PCA Results & Explanation")
 st.write("### Principal Components:")
 st.write(pca.components_)
@@ -76,6 +87,23 @@ st.write(pca.explained_variance_ratio_)
 st.write("The explained variance ratio tells us how much of the total variance in the data is captured by each principal component. The sum of these values equals 1, meaning all variance in the original dataset is retained across the new dimensions.")
 
 # Visualizing variance explained
+st.subheader("Further Confirmation: Correlation Analysis")
+st.write("To further validate our interpretation, we can examine the correlation between PC1 and the difference between Action and Comedy movies watched (Action - Comedy). If PC1 truly represents a 'Taste Preference Score,' we should observe a strong correlation.")
+
+# Compute the difference between Action and Comedy
+movie_diff = data[:, 0] - data[:, 1]
+
+# Scatter plot to visualize correlation
+fig, ax = plt.subplots()
+ax.scatter(movie_diff, principal_components[:, 0], c=colors)
+ax.set_xlabel("Action - Comedy Movies Watched")
+ax.set_ylabel("PC1 Value")
+ax.set_title("Correlation between Movie Preference Difference and PC1")
+ax.grid(True)
+st.pyplot(fig)
+
+st.write("From the scatter plot, we can see that PC1 is highly correlated with the difference between Action and Comedy movies watched. This further supports our interpretation that PC1 represents the customer's taste preference.")
+
 st.subheader("Variance Explained by Each Principal Component")
 st.write("The following bar chart represents the proportion of total variance explained by each principal component.")
 fig, ax = plt.subplots()
