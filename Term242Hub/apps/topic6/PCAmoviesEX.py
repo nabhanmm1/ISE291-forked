@@ -139,6 +139,37 @@ st.write("Transformed Data (PCA Scores):")
 st.write(pca_scores)
 st.write("Each row in the transformed data corresponds to a data point in the PCA space, representing its coordinates along the new principal component axes.")
 
+# Select the first data point for demonstration
+example_point = X_centered[0]
+pc1, pc2 = pca.components_
+
+# Compute PC scores manually for the first data point
+pc1_score = np.dot(example_point, pc1)
+pc2_score = np.dot(example_point, pc2)
+
+# Display step-by-step computation
+st.subheader("Step-by-Step PCA Transformation Example")
+st.write("Let's take the first data point and compute its PCA scores step by step.")
+
+st.write(f"Original Centered Data Point: {example_point}")
+st.write(f"Principal Component 1 Direction: {pc1}")
+st.write(f"Principal Component 2 Direction: {pc2}")
+
+st.write("### Computing PCA Scores:")
+st.latex(r"PC1\ Score = X_{\text{centered}} \cdot PC1\ Direction")
+st.write(f"= ({example_point[0]} × {pc1[0]}) + ({example_point[1]} × {pc1[1]})")
+st.write(f"= {example_point[0] * pc1[0]:.4f} + {example_point[1] * pc1[1]:.4f}")
+st.write(f"= {pc1_score:.4f}")
+
+st.latex(r"PC2\ Score = X_{\text{centered}} \cdot PC2\ Direction")
+st.write(f"= ({example_point[0]} × {pc2[0]}) + ({example_point[1]} × {pc2[1]})")
+st.write(f"= {example_point[0] * pc2[0]:.4f} + {example_point[1] * pc2[1]:.4f}")
+st.write(f"= {pc2_score:.4f}")
+
+st.write("Thus, the transformed PCA scores for this point are:")
+st.write(f"PC1: {pc1_score:.4f}, PC2: {pc2_score:.4f}")
+
+
 st.subheader("PCA Results & Explanation")
 st.write("### Principal Components:")
 st.write(pca.components_)
