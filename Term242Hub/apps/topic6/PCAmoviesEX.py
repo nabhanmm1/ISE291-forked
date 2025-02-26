@@ -84,23 +84,60 @@ st.pyplot(fig)
 
 # Display PCA results with explanations
 st.subheader("Interpreting Principal Component 1")
-st.write("Observing the PCA-transformed data, we notice that PC1 appears to represent a customer's inclination towards either Action or Comedy movies.")
-st.write("- Higher values of PC1 correspond to individuals who watch more Action movies than Comedy movies.")
-st.write("- Lower values of PC1 correspond to individuals who watch more Comedy movies than Action movies.")
-st.write("- A PC1 value close to 0 corresponds to individuals who watch an equal number of Action and Comedy movies.")
-st.write("This suggests that PC1 can be interpreted as a 'Taste Preference Score,' where positive values indicate an inclination towards Action movies and negative values indicate an inclination towards Comedy movies.")
+st.write("""
+Observing the PCA-transformed data, we notice that PC1 appears to represent a customer's inclination towards either Action or Comedy movies:
+- Higher values of PC1 correspond to individuals who watch more Action movies than Comedy movies.
+- Lower values of PC1 correspond to individuals who watch more Comedy movies than Action movies.
+- A PC1 value close to 0 corresponds to individuals who watch an equal number of Action and Comedy movies.
+
+This suggests that PC1 can be interpreted as a 'Taste Preference Score,' where positive values indicate an inclination towards Action movies and negative values indicate an inclination towards Comedy movies.
+""")
 
 st.subheader("Interpreting Principal Component 2")
-st.write("Examining PC2, we observe that it corresponds to the total number of movies watched by an individual, regardless of genre.")
-st.write("- Higher values of PC2 indicate individuals who have watched more movies overall (both Action and Comedy).")
-st.write("- Lower values of PC2 indicate individuals who have watched fewer movies overall.")
-st.write("Since most individuals in the dataset have watched a similar total number of movies, the variance in PC2 is relatively low compared to PC1. This explains why PC2 captures much less variance.")
+st.write("""
+Examining PC2, we observe that it corresponds to the total number of movies watched by an individual, regardless of genre:
+- Higher values of PC2 indicate individuals who have watched more movies overall (both Action and Comedy).
+- Lower values of PC2 indicate individuals who have watched fewer movies overall.
+
+Since most individuals in the dataset have watched a similar total number of movies, the variance in PC2 is relatively low compared to PC1. This explains why PC2 captures much less variance.
+""")
 
 st.subheader("Why This Makes Sense")
-st.write("PCA identifies the direction of maximum variance in the data. Since action and comedy movie counts are the two defining features in this dataset, PCA naturally finds the dominant trend, which happens to be how much an individual leans towards one genre over the other.")
-st.write("The second principal component (PC2), which explains the remaining variance, captures a different relationship—it corresponds to the total number of movies watched. Since most individuals in the dataset have watched a similar total number of movies, PC2 has a much lower variance compared to PC1. This explains why PC2 does not contribute significantly to distinguishing between individuals based on movie preference.")
-st.write("PCA identifies the direction of maximum variance in the data. Since action and comedy movie counts are the two defining features in this dataset, PCA naturally finds the dominant trend, which happens to be how much an individual leans towards one genre over the other.")
-st.write("The second principal component (PC2), which explains the remaining variance, would capture a different relationship, likely related to overall variability in watching behavior rather than preference.")
+st.write("""
+PCA identifies the direction of maximum variance in the data. Since action and comedy movie counts are the two defining features in this dataset, PCA naturally finds the dominant trend, which happens to be how much an individual leans towards one genre over the other.
+
+The second principal component (PC2), which explains the remaining variance, captures a different relationship—it corresponds to the total number of movies watched. Since most individuals in the dataset have watched a similar total number of movies, PC2 has a much lower variance compared to PC1. This explains why PC2 does not contribute significantly to distinguishing between individuals based on movie preference.
+""")
+
+st.subheader("Mathematical Breakdown of PCA Transformation")
+st.write("""
+To better understand how PCA transforms the original data into new scores, we perform the transformation step-by-step using matrix multiplication.
+
+The transformation formula is:
+
+\[ Z = X_{centered} W \]
+
+Where:
+- \( Z \) is the transformed data in the PCA space.
+- \( X_{centered} \) is the original data matrix after mean-centering.
+- \( W \) is the principal component matrix (eigenvectors of the covariance matrix).
+
+Let's apply this transformation to compute the PCA scores:
+""")
+
+# Compute centered data
+X_centered = data - np.mean(data, axis=0)
+
+# Apply PCA transformation
+pca_scores = X_centered @ pca.components_.T
+
+# Display results
+st.write("### PCA Transformation Results")
+st.write("Original Data (Centered):")
+st.write(X_centered)
+st.write("Transformed Data (PCA Scores):")
+st.write(pca_scores)
+st.write("Each row in the transformed data corresponds to a data point in the PCA space, representing its coordinates along the new principal component axes.")
 
 st.subheader("PCA Results & Explanation")
 st.write("### Principal Components:")
