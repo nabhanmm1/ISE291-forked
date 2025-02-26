@@ -42,7 +42,7 @@ def main():
     st.markdown("This plot shows the raw data points, where each color represents a different customer.")
     fig1, ax1 = plt.subplots()
     ax1.scatter(data[:, 0], data[:, 1], c=colors)
-    ax1.set_xlabel("Action Movies Watched")
+    ax1.set_xlabel("Action Movies Wat-ched")
     ax1.set_ylabel("Comedy Movies Watched")
     ax1.set_title("Color-Coded Customer Movie Preferences")
     ax1.grid(True)
