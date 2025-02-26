@@ -38,6 +38,23 @@ pca.fit(data)
 principal_components = pca.transform(data)
 
 # Scatter plot of PCA-transformed data
+st.subheader("Comparison: PCA Representation vs. Original Data")
+st.write("To better understand how PCA transforms the data, we compare the PCA scatter plot with the original dataset side by side.")
+
+fig, (ax1, ax2) = plt.subplots(1, 2, figsize=(12, 5))
+ax1.scatter(data[:, 0], data[:, 1], c=colors)
+ax1.set_xlabel("Action Movies Watched")
+ax1.set_ylabel("Comedy Movies Watched")
+ax1.set_title("Original Data")
+ax1.grid(True)
+
+ax2.scatter(principal_components[:, 0], principal_components[:, 1], c=colors)
+ax2.set_xlabel("PC1")
+ax2.set_ylabel("PC2")
+ax2.set_title("PCA Transformed Data")
+ax2.grid(True)
+st.pyplot(fig)
+
 st.subheader("Transformed Data (PCA Representation)")
 st.write("After applying PCA, the data is rotated to align with the directions of maximum variance. The axes now represent the principal components.")
 fig, ax = plt.subplots()
@@ -81,6 +98,8 @@ st.write("Since most individuals in the dataset have watched a similar total num
 
 st.subheader("Why This Makes Sense")
 st.write("PCA identifies the direction of maximum variance in the data. Since action and comedy movie counts are the two defining features in this dataset, PCA naturally finds the dominant trend, which happens to be how much an individual leans towards one genre over the other.")
+st.write("The second principal component (PC2), which explains the remaining variance, captures a different relationship—it corresponds to the total number of movies watched. Since most individuals in the dataset have watched a similar total number of movies, PC2 has a much lower variance compared to PC1. This explains why PC2 does not contribute significantly to distinguishing between individuals based on movie preference.")
+st.write("PCA identifies the direction of maximum variance in the data. Since action and comedy movie counts are the two defining features in this dataset, PCA naturally finds the dominant trend, which happens to be how much an individual leans towards one genre over the other.")
 st.write("The second principal component (PC2), which explains the remaining variance, would capture a different relationship, likely related to overall variability in watching behavior rather than preference.")
 
 st.subheader("PCA Results & Explanation")
@@ -108,7 +127,8 @@ ax.set_title("Correlation between Movie Preference Difference and PC1")
 ax.grid(True)
 st.pyplot(fig)
 
-st.write("From the scatter plot, we can see that PC1 is highly correlated with the difference between Action and Comedy movies watched. This further supports our interpretation that PC1 represents the customer's taste preference.")
+correlation_pc1 = np.corrcoef(movie_diff, principal_components[:, 0])[0, 1]
+st.write(f"The Pearson correlation coefficient between PC1 and (Action - Comedy) is: {correlation_pc1:.2f}. This strong correlation supports our interpretation that PC1 represents the customer's taste preference.")
 
 st.subheader("Further Confirmation: PC2 and Total Movies Watched")
 st.write("To validate our interpretation of PC2, we can examine its correlation with the total number of movies watched (Action + Comedy). If PC2 represents overall movie-watching behavior, we should see a strong correlation.")
@@ -125,7 +145,8 @@ ax.set_title("Correlation between Total Movies Watched and PC2")
 ax.grid(True)
 st.pyplot(fig)
 
-st.write("From the scatter plot, we can see that PC2 is highly correlated with the total number of movies watched. This confirms our interpretation that PC2 represents overall movie-watching behavior.")
+correlation_pc2 = np.corrcoef(total_movies, principal_components[:, 1])[0, 1]
+st.write(f"The Pearson correlation coefficient between PC2 and total movies watched is: {correlation_pc2:.2f}. This confirms our interpretation that PC2 represents overall movie-watching behavior.")
 
 st.subheader("Variance Explained by Each Principal Component")
 st.write("The following bar chart represents the proportion of total variance explained by each principal component.")
